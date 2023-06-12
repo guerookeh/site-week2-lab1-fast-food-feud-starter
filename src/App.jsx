@@ -1,6 +1,8 @@
 // IMPORT ANY NEEDED COMPONENTS HERE
 import { Dataset } from "./data/dataset"
 import "./App.css"
+import Chip from "./components/Chip/Chip"
+import { useState } from 'react'
 
 // don't move this!
 export const appInfo = {
@@ -21,13 +23,20 @@ export const appInfo = {
 export function App() {
   const { data, categories, restaurants } = Dataset.createDataSet()
 
+  const [activeChipCategory, activeChipSetterCategory] = useState(0)
+  const [activeChipRestaurant, activeChipSetterRestaurant] = useState(0)
+
   return (
     <main className="App">
       {/* CATEGORIES COLUMN */}
       <div className="CategoriesColumn col">
         <div className="categories options">
           <h2 className="title">Categories</h2>
-          {/* YOUR CODE HERE */}
+
+          { categories.map((category, index) => {
+            return <Chip key={index} label={category} isActive={(activeChipCategory == {index}) ? false : true} setChipFunc={() => activeChipSetterCategory({index})}/>
+          })}
+
         </div>
       </div>
 
@@ -38,7 +47,13 @@ export function App() {
         {/* RESTAURANTS ROW */}
         <div className="RestaurantsRow">
           <h2 className="title">Restaurants</h2>
-          <div className="restaurants options">{/* YOUR CODE HERE */}</div>
+          <div className="restaurants options">
+
+            {/* { restaurants.map((restaurant, index) => {
+              return <Chip keyIdx={index} label={restaurant} isActive={(activeChipRestaurant == keyIdx) ? true : false} onClick={activeChipSetterRestaurant(keyIdx)}/>
+            })} */}
+      
+          </div>
         </div>
 
         {/* INSTRUCTIONS GO HERE */}
@@ -47,7 +62,9 @@ export function App() {
         <div className="MenuDisplay display">
           <div className="MenuItemButtons menu-items">
             <h2 className="title">Menu Items</h2>
-            {/* YOUR CODE HERE */}
+            
+
+
           </div>
 
           {/* NUTRITION FACTS */}
