@@ -94,7 +94,7 @@ export function App() {
 
           {/* NUTRITION FACTS */}
           <div className="NutritionFacts nutrition-facts">
-            <NutritionalLabel/>
+            <NutritionalLabel activeItem={activeItem}/>
           </div>
         </div>
 
