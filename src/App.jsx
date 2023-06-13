@@ -2,6 +2,7 @@
 import { Dataset } from "./data/dataset"
 import "./App.css"
 import Chip from "./components/Chip/Chip"
+import NutritionalLabel from "./components/NutritionalLabel/NutritionalLabel"
 import { useState } from 'react'
 
 // don't move this!
@@ -23,8 +24,30 @@ export const appInfo = {
 export function App() {
   const { data, categories, restaurants } = Dataset.createDataSet()
 
-  const [activeChipCategory, activeChipSetterCategory] = useState(0)
-  const [activeChipRestaurant, activeChipSetterRestaurant] = useState(0)
+  const [activeCategory, activeCategorySetter] = useState(null)
+  const [activeRestaurant, activeRestaurantSetter] = useState(null)
+  const [activeItem, activeItemSetter] = useState(null)
+
+  const [activeChipCategory, activeChipSetterCategory] = useState(null)
+  const [activeChipRestaurant, activeChipSetterRestaurant] = useState(null)
+  const [activeChipItem, activeChipSetterItem] = useState(null)
+
+  let currentMenuItems = data.filter(item => (item.food_category == activeCategory) && (item.restaurant == activeRestaurant))
+
+  function chipCategoryFunction(index, category) {
+    activeCategorySetter(category)
+    activeChipSetterCategory(index)
+  }
+
+  function chipRestaurantFunction(index, restaurant) {
+    activeRestaurantSetter(restaurant)
+    activeChipSetterRestaurant(index)
+  }
+
+  function chipItemFunction(index, item) {
+    activeItemSetter(item)
+    activeChipSetterItem(index)
+  }
 
   return (
     <main className="App">
@@ -34,7 +57,7 @@ export function App() {
           <h2 className="title">Categories</h2>
 
           { categories.map((category, index) => {
-            return <Chip key={index} label={category} isActive={(activeChipCategory == {index}) ? false : true} setChipFunc={() => activeChipSetterCategory({index})}/>
+            return <Chip key={index} label={category} isActive={(activeChipCategory == index) ? false : true} setChipFunc={() => {chipCategoryFunction(index, category)}}/>
           })}
 
         </div>
@@ -49,9 +72,9 @@ export function App() {
           <h2 className="title">Restaurants</h2>
           <div className="restaurants options">
 
-            {/* { restaurants.map((restaurant, index) => {
-              return <Chip keyIdx={index} label={restaurant} isActive={(activeChipRestaurant == keyIdx) ? true : false} onClick={activeChipSetterRestaurant(keyIdx)}/>
-            })} */}
+          { restaurants.map((restaurant, index) => {
+            return <Chip key={index} label={restaurant} isActive={(activeChipRestaurant == index) ? false : true} setChipFunc={() => {chipRestaurantFunction(index, restaurant)}}/>
+          })}
       
           </div>
         </div>
@@ -63,12 +86,16 @@ export function App() {
           <div className="MenuItemButtons menu-items">
             <h2 className="title">Menu Items</h2>
             
-
+            { currentMenuItems.map((item, index) => {
+              return <Chip key={index} label={item.item_name} isActive={(activeChipItem == index) ? false : true} setChipFunc={() => {chipItemFunction(index, item)}}/>
+            })}
 
           </div>
 
           {/* NUTRITION FACTS */}
-          <div className="NutritionFacts nutrition-facts">{/* YOUR CODE HERE */}</div>
+          <div className="NutritionFacts nutrition-facts">
+            <NutritionalLabel/>
+          </div>
         </div>
 
         <div className="data-sources">
